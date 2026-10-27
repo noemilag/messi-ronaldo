@@ -159,6 +159,29 @@ h2 { margin: 0; font-family: var(--f-display); font-weight: 800; font-size: 28px
 .ev p { margin: 0; min-width: 0; }
 .ev + .ev { border-top: 1px solid var(--line); }
 
+/* Last / next match */
+.matches { display: grid; gap: 16px; }
+.match-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.mcard { border: 1px solid var(--line); border-top: 3px solid var(--c); border-radius: 14px; background: rgba(0,0,0,.24); padding: 18px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.mcard.m { --c: var(--messi); } .mcard.r { --c: var(--cr7); }
+.mcard h3 { margin: 0; font-family: var(--f-display); font-weight: 800; font-size: 24px; text-transform: uppercase; color: var(--c); line-height: 1; }
+.mlabel { font-family: var(--f-data); font-weight: 600; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.mhead { display: grid; gap: 4px; }
+.mscore { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-family: var(--f-data); font-weight: 600; font-size: 18px; }
+.mscore b { font-family: var(--f-display); font-weight: 900; font-size: 26px; font-variant-numeric: tabular-nums; }
+.chip { font-family: var(--f-data); font-weight: 700; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.chip.V { background: var(--live); border-color: var(--live); color: var(--night); }
+.chip.D { background: var(--cr7-deep); border-color: var(--cr7-deep); color: var(--fg); }
+.msub { font-size: 13px; color: var(--muted); }
+.mstats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px 8px; border-top: 1px solid var(--line); padding-top: 14px; }
+.mstats div { display: grid; gap: 2px; min-width: 0; }
+.mstats strong { font-family: var(--f-display); font-weight: 800; font-size: 28px; line-height: 1; font-variant-numeric: tabular-nums; }
+.mstats .hl strong { color: var(--c); }
+.mstats span { font-size: 12px; color: var(--muted); line-height: 1.2; }
+.mnext { border-radius: 10px; background: rgba(255,255,255,.05); padding: 12px 14px; display: grid; gap: 4px; }
+.mnext .when { font-family: var(--f-display); font-weight: 800; font-size: 22px; line-height: 1.05; }
+.mnext .vs { font-family: var(--f-data); font-weight: 600; font-size: 16px; }
+.mempty { font-size: 14px; color: var(--muted); margin: 0; }
 .src { font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 6px; }
 .src a { color: inherit; }
 
@@ -248,6 +271,11 @@ h2 { margin: 0; font-family: var(--f-display); font-weight: 800; font-size: 28px
   </nav>
 
   <section class="panel" id="panel" role="tabpanel"></section>
+
+  <section class="matches" aria-labelledby="matchH">
+    <div class="head"><span class="kicker">Sur le terrain</span><h2 id="matchH">Dernier et prochain match</h2></div>
+    <div class="match-grid" id="matchGrid"></div>
+  </section>
 
   <footer class="src">
     <span id="srcNote">Les totaux varient d'un ou deux buts selon les sources (matchs amicaux, comptage des sélections). Statistiques secondaires : dernier relevé public connu.</span>
@@ -346,7 +374,7 @@ let T0 = performance.now();
 const PHASE = { top: 0, race: 900, rows: 1800 };
 function waitFor(el) {
   if (el.classList.contains("race")) return 0; // the section itself slides in right away
-  const phase = el.closest("#panel") ? PHASE.rows : el.closest(".race") ? PHASE.race : PHASE.top;
+  const phase = el.closest("#panel, .matches") ? PHASE.rows : el.closest(".race") ? PHASE.race : PHASE.top;
   const w = Math.max(0, phase - (performance.now() - T0));
   el.style.setProperty("--w", w + "ms");
   return w;
@@ -462,6 +490,7 @@ document.querySelectorAll(".tab").forEach((b) => b.addEventListener("click", () 
 await refresh(true);
 renderTicks();
 renderHeadline();
+renderMatches();
 // Offsets inside each phase: both top counters together, then the gap; on the pitch the counters follow the balls.
 [["#gM", 0.3], ["#gR", 0.3], ["#gap", 1.0], ["#leftM", 0.2], ["#leftR", 0.2]].forEach(([s, d]) => {
   $(s).dataset.count = ""; $(s).style.setProperty("--d", d + "s");
@@ -484,6 +513,40 @@ show(current);
 setInterval(refresh, 60000);
 })();
 
+// Last match stats and next match, both written into data.json by the robot.
+const longDate = (iso, withTime) => new Date(iso).toLocaleString("fr-FR", withTime
+  ? { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }
+  : { weekday: "long", day: "numeric", month: "long" });
+const RESULT = { V: "Victoire", N: "Nul", D: "Défaite" };
+function matchCard(side, name) {
+  const last = DATA.lastMatch?.[side], next = DATA.next?.[side];
+  let html = `<article class="mcard ${side} reveal" data-anim style="--d:${side === "r" ? 0.3 : 0}s"><h3>${name}</h3>`;
+  if (last) {
+    const s = last.stats || {};
+    const [own, other] = String(last.score).split("-");
+    const cell = (v, lbl, hl) => `<div${hl ? ' class="hl"' : ""}><strong${typeof v === "number" && Number.isInteger(v) ? ` data-count data-to="${v}"` : ""}>${v ?? "–"}</strong><span>${lbl}</span></div>`;
+    html += `<div class="mhead"><span class="mlabel">Dernier match · ${esc(longDate(last.date))}</span>
+      <div class="mscore"><span>${esc(last.team)}</span><b>${esc(own)} – ${esc(other)}</b><span>${esc(last.opponent)}</span><span class="chip ${esc(last.result)}">${RESULT[last.result] || ""}</span></div>
+      <span class="msub">${esc(last.league)} · ${last.home ? "à domicile" : "à l'extérieur"}</span></div>
+      <div class="mstats">
+        ${cell(s.goals, "Buts", true)}${cell(s.assists, "Passes déc.", true)}${cell(s.minutes, "Minutes")}${cell(s.rating != null ? s.rating.toFixed(1).replace(".", ",") : null, "Note")}
+        ${cell(s.shotsOn, `Tirs cadrés sur ${s.shots ?? "–"}`)}${cell(s.keyPasses, "Passes clés")}${cell(s.accuracy != null ? s.accuracy + " %" : null, "Passes réussies")}${cell(s.dribbles, "Dribbles réussis")}
+      </div>`;
+  } else {
+    html += `<p class="mempty">Ses statistiques apparaîtront ici après son prochain match. Le robot les ajoute automatiquement.</p>`;
+  }
+  html += `<div class="mnext"><span class="mlabel">Prochain match</span>`;
+  if (next) html += `<span class="when">${esc(longDate(next.date, true))}</span>
+      <span class="vs">${next.home ? "Contre" : "Chez"} ${esc(next.opponent)}</span>
+      <span class="msub">${esc(next.league)} · ${next.home ? "à domicile" : "à l'extérieur"} · heure locale</span>`;
+  else if (next === null) html += `<span class="vs">Aucun match prévu dans les 10 prochains jours</span>`;
+  else html += `<span class="vs">Bientôt disponible</span>`;
+  return html + "</div></article>";
+}
+function renderMatches() {
+  $("#matchGrid").innerHTML = matchCard("m", "Messi") + matchCard("r", "Ronaldo");
+}
+
 // Live updates: data.json is rewritten by the GitHub Action (.github/workflows/update.yml) after each match.
 // The page reads it on load, then checks again every minute.
 async function refresh(first) {
@@ -499,9 +562,11 @@ async function refresh(first) {
   if (!d || !d.goals || typeof d.goals.m !== "number" || typeof d.goals.r !== "number") return;
   const prev = { ...DATA.goals };
   const same = prev.m === d.goals.m && prev.r === d.goals.r;
+  const matchesBefore = JSON.stringify([DATA.lastMatch, DATA.next]);
   DATA = { ...SNAPSHOT, ...d };
   $("#pill").classList.add("on");
   $("#pillText").textContent = "Synchronisé";
+  if (!first && JSON.stringify([DATA.lastMatch, DATA.next]) !== matchesBefore) { renderMatches(); observe($("#matchGrid")); }
   if (first || same) return;
   renderHeadline(prev);
   show(current);
