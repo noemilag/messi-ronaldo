@@ -1,6 +1,6 @@
 // Adds the goals Messi and Ronaldo scored in newly finished matches to data.json.
 // Data source: API-Football (https://www.api-football.com), key in the API_FOOTBALL_KEY secret.
-// Usage: node scripts/update.mjs            -> check recent matches
+// Usage: node scripts/update.mjs            -> check yesterday's and today's matches
 //        node scripts/update.mjs 937 983    -> set both totals by hand (correction)
 import { readFile, writeFile } from "node:fs/promises";
 
@@ -62,9 +62,15 @@ const counted = new Set(data.counted);
 const fresh = []; // [date, feed entry], sorted newest first before saving
 let changed = false;
 
+// The free plan refuses the "last" parameter, so fetch every match of yesterday and today (one call per day)
+// and keep the ones involving our teams. Yesterday covers matches that end after midnight.
+const day = (offset) => new Date(today.getTime() + offset * 86400000).toISOString().slice(0, 10);
+const allFixtures = [];
+for (const d of [day(-1), day(0)]) allFixtures.push(...await api(`/fixtures?date=${d}&timezone=UTC`));
+
 for (const [side, player] of Object.entries(PLAYERS)) {
   for (const team of player.teams) {
-    const fixtures = await api(`/fixtures?team=${team.id}&last=5`);
+    const fixtures = allFixtures.filter((f) => f.teams.home.id === team.id || f.teams.away.id === team.id);
     for (const f of fixtures) {
       const id = f.fixture.id;
       if (counted.has(id) || !FINISHED.has(f.fixture.status.short)) continue;
