@@ -120,7 +120,7 @@ h2 { margin: 0; font-family: var(--f-display); font-weight: 800; font-size: 28px
 .row .lbl { text-align: center; font-family: var(--f-data); font-weight: 600; font-size: 15px; letter-spacing: .04em; line-height: 1.2; }
 .row .lbl small { display: block; font-family: var(--f-body); font-weight: 400; font-size: 12px; color: var(--muted); letter-spacing: 0; margin-top: 2px; }
 .bar { height: 8px; background: rgba(255,255,255,.06); border-radius: 4px; position: relative; overflow: hidden; }
-.bar i { position: absolute; top: 0; bottom: 0; border-radius: 4px; transition: width 1.8s cubic-bezier(.25,.7,.2,1); transition-delay: calc(var(--d, 0s) + .2s); }
+.bar i { position: absolute; top: 0; bottom: 0; border-radius: 4px; transition: width 1.8s cubic-bezier(.25,.7,.2,1); transition-delay: calc(var(--d, 0s) + var(--w, 0ms) + .2s); }
 .bar.l i { right: 0; background: linear-gradient(270deg, var(--messi), var(--messi-deep)); }
 .bar.r i { left: 0; background: linear-gradient(90deg, var(--cr7), var(--cr7-deep)); }
 .note { font-size: 13px; color: var(--muted); margin: 0; max-width: 68ch; }
@@ -147,7 +147,7 @@ h2 { margin: 0; font-family: var(--f-display); font-weight: 800; font-size: 28px
 .crow span:first-child { font-family: var(--f-data); font-weight: 600; font-size: 16px; letter-spacing: .03em; }
 .crow span:nth-child(2) { font-family: var(--f-display); font-weight: 800; font-size: 22px; line-height: 1; font-variant-numeric: tabular-nums; }
 .crow .cb { grid-column: 1 / -1; height: 6px; background: rgba(255,255,255,.06); border-radius: 3px; overflow: hidden; }
-.crow .cb i { display: block; height: 100%; border-radius: 3px; transition: width 1.8s cubic-bezier(.25,.7,.2,1); transition-delay: calc(var(--d, 0s) + .2s); }
+.crow .cb i { display: block; height: 100%; border-radius: 3px; transition: width 1.8s cubic-bezier(.25,.7,.2,1); transition-delay: calc(var(--d, 0s) + var(--w, 0ms) + .2s); }
 .club-col.l .cb i { background: var(--messi); } .club-col.r .cb i { background: var(--cr7); }
 
 /* Feed */
@@ -178,16 +178,16 @@ h2 { margin: 0; font-family: var(--f-display); font-weight: 800; font-size: 28px
 .replay { border: 1px solid var(--line); background: rgba(0,0,0,.25); border-radius: 999px; padding: 4px 12px; font-family: var(--f-data); font-weight: 700; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
 .replay:hover { border-color: var(--fg); }
 /* Motion */
-.half.m { animation: fromL 1.4s cubic-bezier(.25,.7,.2,1) both; }
-.half.r { animation: fromR 1.4s .25s cubic-bezier(.25,.7,.2,1) both; }
-.mid { animation: whistle .9s 2.6s cubic-bezier(.3,1.6,.5,1) both; }
+.half.m { animation: fromL 1s cubic-bezier(.25,.7,.2,1) both; }
+.half.r { animation: fromR 1s cubic-bezier(.25,.7,.2,1) both; }
+.mid { animation: whistle .8s .6s cubic-bezier(.3,1.6,.5,1) both; }
 @keyframes fromL { from { transform: translateX(-6%); opacity: .3; } }
 @keyframes fromR { from { transform: translateX(6%); opacity: .3; } }
 @keyframes whistle { from { transform: translate(-50%, -50%) scale(.4); } }
 .jersey { will-change: transform; }
-.reveal.in { animation: rise 1s cubic-bezier(.25,.7,.2,1) both; animation-delay: var(--d, 0s); }
+.reveal.in { animation: rise 1s cubic-bezier(.25,.7,.2,1) both; animation-delay: calc(var(--d, 0s) + var(--w, 0ms)); }
 @keyframes rise { from { transform: translateY(26px); opacity: .15; } }
-.pips.in .row-dots i { animation: pop .45s cubic-bezier(.3,1.6,.5,1) both; animation-delay: calc(var(--i) * 160ms + var(--d, 0s) + .5s); }
+.pips.in .row-dots i { animation: pop .45s cubic-bezier(.3,1.6,.5,1) both; animation-delay: calc(var(--i) * 160ms + var(--d, 0s) + var(--w, 0ms) + .5s); }
 @keyframes pop { from { transform: scale(0); } }
 .runner.rolling .ball { animation: roll 2.6s cubic-bezier(.25,.7,.2,1); }
 @keyframes roll { from { transform: rotate(-720deg); } }
@@ -340,12 +340,24 @@ function kickOff(runner, g, delay = 0) {
     setTimeout(() => runner.classList.remove("rolling"), 2700);
   }, delay);
 }
+// Sequence on load: 1) the two top counters, 2) the two balls of the race, 3) the numbers and bars below.
+// Each element waits for its phase even if it is already on screen; later in the visit it plays as soon as it is seen.
+let T0 = performance.now();
+const PHASE = { top: 0, race: 3200, rows: 6200 };
+function waitFor(el) {
+  if (el.classList.contains("race")) return 0; // the section itself slides in right away
+  const phase = el.closest("#panel") ? PHASE.rows : el.closest(".race") ? PHASE.race : PHASE.top;
+  const w = Math.max(0, phase - (performance.now() - T0));
+  el.style.setProperty("--w", w + "ms");
+  return w;
+}
 function play(el) {
   if (calm) return;
-  if (el.dataset.to !== undefined && el.dataset.count !== undefined) countTo(el, Number(el.dataset.to), 0, 2200, delayOf(el) + 300);
+  const w = waitFor(el);
+  if (el.dataset.to !== undefined && el.dataset.count !== undefined) countTo(el, Number(el.dataset.to), 0, 2200, delayOf(el) + w);
   if (el.matches(".bar i, .cb i")) grow(el);
   if (el.matches(".reveal, .pips")) el.classList.add("in");
-  if (el.id === "pitch") { kickOff($("#rM"), DATA.goals.m, 600); kickOff($("#rR"), DATA.goals.r, 2000); }
+  if (el.id === "pitch") { kickOff($("#rM"), DATA.goals.m, w); kickOff($("#rR"), DATA.goals.r, w); }
 }
 const io = "IntersectionObserver" in window && !calm
   ? new IntersectionObserver((entries) => entries.forEach((e) => {
@@ -450,8 +462,8 @@ document.querySelectorAll(".tab").forEach((b) => b.addEventListener("click", () 
 await refresh(true);
 renderTicks();
 renderHeadline();
-// Timeline: halves slide in, Messi counts, then Ronaldo, then the gap; on the pitch each counter follows its ball.
-[["#gM", 0.9], ["#gR", 1.5], ["#gap", 3.3], ["#leftM", 0.8], ["#leftR", 2.2]].forEach(([s, d]) => {
+// Offsets inside each phase: both top counters together, then the gap; on the pitch the counters follow the balls.
+[["#gM", 0.3], ["#gR", 0.3], ["#gap", 1.0], ["#leftM", 0.2], ["#leftR", 0.2]].forEach(([s, d]) => {
   $(s).dataset.count = ""; $(s).style.setProperty("--d", d + "s");
 });
 observe(document);
@@ -459,6 +471,7 @@ if (io) io.observe($("#pitch"));
 try { const s = localStorage.getItem("mr-tab"); if (panels[s]) current = s; } catch (e) {}
 
 function replay() {
+  T0 = performance.now();
   scrollTo({ top: 0, behavior: calm ? "auto" : "smooth" });
   document.querySelectorAll(".half, .mid").forEach((el) => { el.style.animation = "none"; void el.offsetWidth; el.style.animation = ""; });
   document.querySelectorAll(".in").forEach((el) => el.classList.remove("in"));
