@@ -67,6 +67,8 @@ let changed = false;
 const day = (offset) => new Date(today.getTime() + offset * 86400000).toISOString().slice(0, 10);
 const allFixtures = [];
 for (const d of [day(-1), day(0)]) allFixtures.push(...await api(`/fixtures?date=${d}&timezone=UTC`));
+const ours = allFixtures.filter((f) => Object.values(PLAYERS).some((p) => p.teams.some((t) => [f.teams.home.id, f.teams.away.id].includes(t.id))));
+console.log(`::notice title=Matchs vérifiés::${allFixtures.length} matchs le ${day(-1)} et le ${day(0)}, dont ${ours.length} d'Inter Miami, Al-Nassr ou du Portugal${ours.length ? " : " + ours.map((f) => `${f.teams.home.name}-${f.teams.away.name} (${f.fixture.status.short})`).join(", ") : ""}.`);
 
 for (const [side, player] of Object.entries(PLAYERS)) {
   for (const team of player.teams) {
