@@ -539,7 +539,7 @@ function matchCard(side, name) {
   if (next) html += `<span class="when">${esc(longDate(next.date, true))}</span>
       <span class="vs">${next.home ? "Contre" : "Chez"} ${esc(next.opponent)}</span>
       <span class="msub">${esc(next.league)} · ${next.home ? "à domicile" : "à l'extérieur"} · heure locale</span>`;
-  else if (next === null) html += `<span class="vs">Aucun match prévu dans les 10 prochains jours</span>`;
+  else if (next === null) html += `<span class="vs">${DATA.check?.calendar ? "Aucun match prévu pour le moment" : "Pas de match aujourd'hui ni demain"}</span>`;
   else html += `<span class="vs">Bientôt disponible</span>`;
   return html + "</div></article>";
 }

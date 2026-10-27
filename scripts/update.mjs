@@ -16,8 +16,7 @@ const PLAYERS = {
 const FINISHED = new Set(["FT", "AET", "PEN"]);
 const UPCOMING = new Set(["TBD", "NS"]);
 const FRIENDLY_LEAGUES = new Set([10, 667]); // international and club friendlies are not official goals
-const LOOKBACK_DAYS = 14; // how far back to look once for a last match when none is stored yet
-const LOOKAHEAD_DAYS = 10; // how far ahead to look for the next match
+// The free plan only serves dates from yesterday to tomorrow, so day-by-day lookups stay inside that window.
 
 const data = JSON.parse(await readFile(FILE, "utf8"));
 data.lastMatch ??= {};
@@ -54,12 +53,14 @@ function fail(message) {
 if (!KEY) fail("Le secret API_FOOTBALL_KEY est manquant ou vide. Ajoute-le dans Settings > Secrets and variables > Actions.");
 
 const pause = (ms) => new Promise((r) => setTimeout(r, ms));
-async function api(path) {
+// soft: a refusal is logged and returns null instead of stopping the run (for optional lookups).
+async function api(path, soft = false) {
   await pause(6500); // stay under the free plan's per-minute limit
   const res = await fetch(API + path, { headers: { "x-apisports-key": KEY } }).catch((e) => fail(`API-Football injoignable : ${e.message}`));
   if (!res.ok) fail(`API-Football répond ${res.status} sur ${path}`);
   const body = await res.json();
   const errors = Array.isArray(body.errors) ? body.errors : Object.values(body.errors || {});
+  if (errors.length && soft) { console.log(`::notice title=Recherche facultative refusée::${path} : ${errors.join(" / ")}`); return null; }
   if (errors.length) fail(`API-Football refuse ${path} : ${errors.join(" / ")}`);
   console.log(`${path} -> ${body.results} résultat(s), quota restant : ${res.headers.get("x-ratelimit-requests-remaining")}`);
   return body.response;
@@ -84,12 +85,40 @@ function describe(f, team) {
   };
 }
 
-// 1. Finished matches: yesterday and today, plus (once a day at most) a look back for a player with no last match yet.
-const firstRunToday = data.check?.date !== day(0);
-const days = [day(-1), day(0)];
-if (firstRunToday && Object.keys(PLAYERS).some((s) => !data.lastMatch[s])) {
-  for (let i = 2; i <= LOOKBACK_DAYS; i++) days.push(day(-i));
+function recordLastMatch(side, player, team, f, lineup) {
+  const entry = lineup[0].players.find((p) => p.player.id === player.id);
+  const s = entry?.statistics?.[0];
+  const minutes = s?.games?.minutes || 0;
+  const info = describe(f, team);
+  const own = info.home ? f.goals.home : f.goals.away;
+  const other = info.home ? f.goals.away : f.goals.home;
+  // Keep the most recent match the player actually played
+  if (minutes > 0 && (!data.lastMatch[side] || data.lastMatch[side].date < f.fixture.date)) {
+    data.lastMatch[side] = {
+      ...info,
+      score: `${own}-${other}`,
+      result: own > other ? "V" : own < other ? "D" : "N",
+      stats: {
+        minutes,
+        goals: s.goals?.total || 0,
+        assists: s.goals?.assists || 0,
+        shots: s.shots?.total || 0,
+        shotsOn: s.shots?.on || 0,
+        passes: s.passes?.total || 0,
+        keyPasses: s.passes?.key || 0,
+        accuracy: Number(s.passes?.accuracy) || null,
+        dribbles: s.dribbles?.success || 0,
+        rating: s.games?.rating ? Number(s.games.rating) : null,
+      },
+    };
+  }
+  return s;
 }
+
+const firstRunToday = data.check?.date !== day(0);
+
+// 1. Finished matches of yesterday and today.
+const days = [day(-1), day(0)];
 
 const counted = new Set(data.counted);
 const fresh = []; // [date, feed entry], sorted newest first before saving
@@ -108,33 +137,8 @@ for (const d of days) {
         if (!lineup.length) { console.log(`Stats du match ${id} pas encore publiées, nouvel essai plus tard.`); continue; }
         counted.add(id); data.counted.push(id);
 
-        const entry = lineup[0].players.find((p) => p.player.id === player.id);
-        const s = entry?.statistics?.[0];
-        const minutes = s?.games?.minutes || 0;
+        const s = recordLastMatch(side, player, team, f, lineup);
         const info = describe(f, team);
-        const own = info.home ? f.goals.home : f.goals.away;
-        const other = info.home ? f.goals.away : f.goals.home;
-
-        // Last match card: keep the most recent match the player actually played
-        if (minutes > 0 && (!data.lastMatch[side] || data.lastMatch[side].date < f.fixture.date)) {
-          data.lastMatch[side] = {
-            ...info,
-            score: `${own}-${other}`,
-            result: own > other ? "V" : own < other ? "D" : "N",
-            stats: {
-              minutes,
-              goals: s.goals?.total || 0,
-              assists: s.goals?.assists || 0,
-              shots: s.shots?.total || 0,
-              shotsOn: s.shots?.on || 0,
-              passes: s.passes?.total || 0,
-              keyPasses: s.passes?.key || 0,
-              accuracy: Number(s.passes?.accuracy) || null,
-              dribbles: s.dribbles?.success || 0,
-              rating: s.games?.rating ? Number(s.games.rating) : null,
-            },
-          };
-        }
 
         // Career total: only official matches since the reference date
         const goals = s?.goals?.total || 0;
@@ -152,22 +156,41 @@ for (const d of days) {
 fresh.sort((a, b) => b[0].localeCompare(a[0]));
 data.feed.unshift(...fresh.map(([, entry]) => entry));
 
-// 2. Next match: refreshed once a day, or as soon as the stored one has kicked off.
+// 2. Once a day: next match, and a last match for a player who has none yet.
+// Tries each team's season calendar first; if the free plan refuses it, falls back to today and tomorrow.
 const nowIso = today.toISOString();
-const stale = (s) => !data.next[s] || data.next[s].date < nowIso;
-if (firstRunToday || Object.keys(PLAYERS).some((s) => data.next[s] && stale(s))) {
+if (firstRunToday || Object.keys(PLAYERS).some((s) => data.next[s] && data.next[s].date < nowIso)) {
   const found = {};
-  for (let i = 0; i <= LOOKAHEAD_DAYS && Object.keys(found).length < 2; i++) {
-    for (const f of await fixturesOn(day(i))) {
-      if (!UPCOMING.has(f.fixture.status.short) || f.fixture.date < nowIso) continue;
-      for (const [side, player] of Object.entries(PLAYERS)) {
-        const team = player.teams.find((t) => teamIn(f, t));
-        if (team && (!found[side] || f.fixture.date < found[side].date)) found[side] = describe(f, team);
+  let calendarRefused = false;
+  for (const [side, player] of Object.entries(PLAYERS)) {
+    for (const team of player.teams) {
+      const season = await api(`/fixtures?team=${team.id}&season=${today.getUTCFullYear()}&timezone=UTC`, true);
+      if (!season) { calendarRefused = true; break; }
+      const upcoming = season.filter((f) => UPCOMING.has(f.fixture.status.short) && f.fixture.date > nowIso)
+        .sort((a, b) => a.fixture.date.localeCompare(b.fixture.date))[0];
+      if (upcoming && (!found[side] || upcoming.fixture.date < found[side].date)) found[side] = describe(upcoming, team);
+      if (!data.lastMatch[side]) {
+        const played = season.filter((f) => FINISHED.has(f.fixture.status.short))
+          .sort((a, b) => b.fixture.date.localeCompare(a.fixture.date))[0];
+        const lineup = played && await api(`/fixtures/players?fixture=${played.fixture.id}&team=${team.id}`, true);
+        if (lineup?.length) recordLastMatch(side, player, team, played, lineup);
+      }
+    }
+    if (calendarRefused) break;
+  }
+  if (calendarRefused) {
+    for (const d of [day(0), day(1)]) {
+      for (const f of await fixturesOn(d)) {
+        if (!UPCOMING.has(f.fixture.status.short) || f.fixture.date < nowIso) continue;
+        for (const [side, player] of Object.entries(PLAYERS)) {
+          const team = player.teams.find((t) => teamIn(f, t));
+          if (team && (!found[side] || f.fixture.date < found[side].date)) found[side] = describe(f, team);
+        }
       }
     }
   }
   for (const side of Object.keys(PLAYERS)) data.next[side] = found[side] || null;
-  data.check = { date: day(0), fixtures: seen };
+  data.check = { date: day(0), fixtures: seen, calendar: !calendarRefused };
 }
 
 console.log(`::notice title=Matchs vérifiés::${seen} matchs lus. Dernier match Messi : ${data.lastMatch.m?.opponent ?? "aucun"}, Ronaldo : ${data.lastMatch.r?.opponent ?? "aucun"}. Prochain match Messi : ${data.next.m?.opponent ?? "aucun"}, Ronaldo : ${data.next.r?.opponent ?? "aucun"}.`);
