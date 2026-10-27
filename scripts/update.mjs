@@ -38,19 +38,22 @@ if (Number.isInteger(manualM) && Number.isInteger(manualR)) {
   process.exit(0);
 }
 
-if (!KEY) {
-  console.error("Le secret API_FOOTBALL_KEY est manquant. Ajoute-le dans Settings > Secrets and variables > Actions.");
+// Errors are printed as GitHub annotations so they show on the run summary and in the failure email.
+function fail(message) {
+  console.log(`::error title=Mise à jour des buts::${message}`);
   process.exit(1);
 }
+
+if (!KEY) fail("Le secret API_FOOTBALL_KEY est manquant ou vide. Ajoute-le dans Settings > Secrets and variables > Actions.");
 
 const pause = (ms) => new Promise((r) => setTimeout(r, ms));
 async function api(path) {
   await pause(6500); // stay under the free plan's per-minute limit
-  const res = await fetch(API + path, { headers: { "x-apisports-key": KEY } });
-  if (!res.ok) throw new Error(`API-Football ${res.status} sur ${path}`);
+  const res = await fetch(API + path, { headers: { "x-apisports-key": KEY } }).catch((e) => fail(`API-Football injoignable : ${e.message}`));
+  if (!res.ok) fail(`API-Football répond ${res.status} sur ${path}`);
   const body = await res.json();
   const errors = Array.isArray(body.errors) ? body.errors : Object.values(body.errors || {});
-  if (errors.length) throw new Error(`API-Football refuse ${path} : ${errors.join(" / ")}`);
+  if (errors.length) fail(`API-Football refuse ${path} : ${errors.join(" / ")}`);
   console.log(`${path} -> ${body.results} résultat(s), quota restant : ${res.headers.get("x-ratelimit-requests-remaining")}`);
   return body.response;
 }
