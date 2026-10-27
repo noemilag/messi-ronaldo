@@ -1,13 +1,52 @@
 {
   "updated": "2026-10-23",
   "since": "2026-10-24",
-  "goals": { "m": 936, "r": 982 },
+  "goals": {
+    "m": 936,
+    "r": 982
+  },
   "feed": [
-    ["23 oct.", "n", "Compteurs à jour : Messi 936, Ronaldo 982."],
-    ["17 oct.", "m", "Doublé de Messi contre Atlanta United. Il passe à 936 buts."],
-    ["17 oct.", "c", "Ronaldo atteint 981 buts, à 19 unités des 1 000."],
-    ["11 oct.", "m", "Messi à 934 buts en carrière."],
-    ["6 oct.", "m", "Dernier match de Messi avec l'Argentine (208e sélection), conclu par un penalty transformé."]
+    [
+      "23 oct.",
+      "n",
+      "Compteurs à jour : Messi 936, Ronaldo 982."
+    ],
+    [
+      "17 oct.",
+      "m",
+      "Doublé de Messi contre Atlanta United. Il passe à 936 buts."
+    ],
+    [
+      "17 oct.",
+      "c",
+      "Ronaldo atteint 981 buts, à 19 unités des 1 000."
+    ],
+    [
+      "11 oct.",
+      "m",
+      "Messi à 934 buts en carrière."
+    ],
+    [
+      "6 oct.",
+      "m",
+      "Dernier match de Messi avec l'Argentine (208e sélection), conclu par un penalty transformé."
+    ]
   ],
-  "counted": []
+  "counted": [],
+  "lastMatch": {},
+  "next": {
+    "m": {
+      "date": "2026-10-28T23:30:00+00:00",
+      "team": "Inter Miami",
+      "opponent": "FC Cincinnati",
+      "home": true,
+      "league": "Major League Soccer"
+    },
+    "r": null
+  },
+  "check": {
+    "date": "2026-10-27",
+    "fixtures": 493,
+    "calendar": false
+  }
 }
