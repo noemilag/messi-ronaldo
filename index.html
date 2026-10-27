@@ -340,10 +340,10 @@ function kickOff(runner, g, delay = 0) {
     setTimeout(() => runner.classList.remove("rolling"), 2700);
   }, delay);
 }
-// Sequence on load: 1) the two top counters, 2) the two balls of the race, 3) the numbers and bars below.
-// Each element waits for its phase even if it is already on screen; later in the visit it plays as soon as it is seen.
+// Staggered starts on load: 1) the two top counters, 2) the two balls of the race, 3) the numbers and bars below.
+// Each phase starts a little after the previous one without waiting for it to finish; later in the visit an element plays as soon as it is seen.
 let T0 = performance.now();
-const PHASE = { top: 0, race: 3200, rows: 6200 };
+const PHASE = { top: 0, race: 900, rows: 1800 };
 function waitFor(el) {
   if (el.classList.contains("race")) return 0; // the section itself slides in right away
   const phase = el.closest("#panel") ? PHASE.rows : el.closest(".race") ? PHASE.race : PHASE.top;
