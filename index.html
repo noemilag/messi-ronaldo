@@ -519,7 +519,7 @@ const longDate = (iso, withTime) => new Date(iso).toLocaleString("fr-FR", withTi
   : { weekday: "long", day: "numeric", month: "long" });
 const RESULT = { V: "Victoire", N: "Nul", D: "Défaite" };
 function matchCard(side, name) {
-  const last = DATA.lastMatch?.[side], next = DATA.next?.[side];
+  const last = DATA.lastMatch?.[side], next = nextMatch(side);
   let html = `<article class="mcard ${side} reveal" data-anim style="--d:${side === "r" ? 0.3 : 0}s"><h3>${name}</h3>`;
   if (last) {
     const s = last.stats || {};
@@ -536,12 +536,23 @@ function matchCard(side, name) {
     html += `<p class="mempty">Ses statistiques apparaîtront ici après son prochain match. Le robot les ajoute automatiquement.</p>`;
   }
   html += `<div class="mnext"><span class="mlabel">Prochain match</span>`;
-  if (next) html += `<span class="when">${esc(longDate(next.date, true))}</span>
+  if (next) html += `<span class="when">${esc(next.timeKnown === false ? longDate(next.date + "T12:00:00Z") : longDate(next.date, true))}</span>
       <span class="vs">${next.home ? "Contre" : "Chez"} ${esc(next.opponent)}</span>
-      <span class="msub">${esc(next.league)} · ${next.home ? "à domicile" : "à l'extérieur"} · heure locale</span>`;
+      <span class="msub">${esc(next.league)} · ${next.home ? "à domicile" : "à l'extérieur"}${next.timeKnown === false ? " · heure à venir" : " · heure locale"}</span>
+      ${next.manual ? `<span class="msub">D'après le calendrier publié${next.note ? ", " + esc(next.note) : ""}. Confirmé par le robot la veille du match.</span>` : ""}`;
   else if (next === null) html += `<span class="vs">${DATA.check?.calendar ? "Aucun match prévu pour le moment" : "Pas de match aujourd'hui ni demain"}</span>`;
   else html += `<span class="vs">Bientôt disponible</span>`;
   return html + "</div></article>";
+}
+// The robot's next match (official, seen up to tomorrow) wins; otherwise the hand-entered schedule in data.json.
+function nextMatch(side) {
+  const now = Date.now();
+  const end = (m) => new Date(m.timeKnown === false ? m.date + "T23:59:59Z" : m.date).getTime();
+  const api = DATA.next?.[side];
+  if (api && end(api) > now) return api;
+  const planned = (DATA.schedule?.[side] || []).filter((m) => end(m) > now).sort((a, b) => end(a) - end(b))[0];
+  if (planned) return { ...planned, manual: true };
+  return api === undefined ? undefined : null;
 }
 function renderMatches() {
   $("#matchGrid").innerHTML = matchCard("m", "Messi") + matchCard("r", "Ronaldo");

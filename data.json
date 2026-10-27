@@ -48,5 +48,88 @@
     "date": "2026-10-27",
     "fixtures": 493,
     "calendar": false
+  },
+  "schedule": {
+    "_aide": "Calendrier saisi à la main, utilisé seulement quand le robot ne voit pas encore le prochain match. Heures en UTC. timeKnown false = heure inconnue.",
+    "m": [
+      {
+        "date": "2026-10-28T23:30:00Z",
+        "opponent": "FC Cincinnati",
+        "home": true,
+        "league": "Major League Soccer",
+        "team": "Inter Miami",
+        "timeKnown": true
+      },
+      {
+        "date": "2026-11-01T23:00:00Z",
+        "opponent": "New England Revolution",
+        "home": false,
+        "league": "Major League Soccer",
+        "team": "Inter Miami",
+        "timeKnown": true,
+        "note": "heure à confirmer"
+      },
+      {
+        "date": "2026-11-07T21:00:00Z",
+        "opponent": "Charlotte FC",
+        "home": true,
+        "league": "Major League Soccer",
+        "team": "Inter Miami",
+        "timeKnown": true
+      }
+    ],
+    "r": [
+      {
+        "date": "2026-10-29T15:00:00Z",
+        "opponent": "Al Kholood",
+        "home": true,
+        "league": "Saudi Pro League",
+        "team": "Al-Nassr",
+        "timeKnown": true,
+        "note": "lieu à confirmer"
+      },
+      {
+        "date": "2026-11-02",
+        "opponent": "Pakhtakor Tachkent",
+        "home": false,
+        "league": "Ligue des champions d'Asie",
+        "team": "Al-Nassr",
+        "timeKnown": false
+      },
+      {
+        "date": "2026-11-06",
+        "opponent": "Al Hazem",
+        "home": false,
+        "league": "Saudi Pro League",
+        "team": "Al-Nassr",
+        "timeKnown": false,
+        "note": "date à confirmer (5 ou 6 nov.)"
+      },
+      {
+        "date": "2026-11-20",
+        "opponent": "Al Qadsiah",
+        "home": true,
+        "league": "Saudi Pro League",
+        "team": "Al-Nassr",
+        "timeKnown": false,
+        "note": "lieu à confirmer"
+      },
+      {
+        "date": "2026-11-24",
+        "opponent": "Al-Sadd",
+        "home": true,
+        "league": "Ligue des champions d'Asie",
+        "team": "Al-Nassr",
+        "timeKnown": false
+      },
+      {
+        "date": "2026-11-26",
+        "opponent": "Al Shabab",
+        "home": true,
+        "league": "Saudi Pro League",
+        "team": "Al-Nassr",
+        "timeKnown": false
+      }
+    ]
   }
 }

@@ -22,8 +22,17 @@ Les matchs amicaux ne sont pas comptés. Un but apparaît sur le site environ 1 
 
 Onglet *Actions → Mise à jour des buts → Run workflow*, puis remplis les deux champs (Messi et Ronaldo) avec les bons totaux.
 
+## Calendrier des prochains matchs
+
+L'offre gratuite d'API-Football ne montre que les matchs d'hier, d'aujourd'hui et de demain. Pour afficher le prochain match plus tôt, `data.json` contient un calendrier saisi à la main, dans `schedule` (`m` pour Messi, `r` pour Ronaldo).
+
+- La page l'utilise seulement quand le robot ne voit pas encore de match. La veille du match, le robot prend le relais avec les données officielles.
+- Pour ajouter un match, copie une ligne existante dans `data.json` (crayon ✏️ sur GitHub) et change la date, l'adversaire et la compétition.
+- Heures en UTC (heure de Paris moins 1 h en hiver). Si l'heure n'est pas connue, écris seulement la date (`"2026-11-20"`) et `"timeKnown": false`.
+- `note` affiche une précision sous le match, par exemple « date à confirmer ».
+
 ## Limites
 
-- L'offre gratuite d'API-Football autorise 100 appels par jour. Le robot en utilise environ 75.
-- Si l'offre gratuite ne donne pas accès à la saison en cours, le journal de l'Action affiche l'erreur renvoyée par API-Football. Il faudra alors une offre payante.
+- L'offre gratuite d'API-Football autorise 100 appels par jour et seulement les dates d'hier à demain. Le robot fait environ 50 appels par jour.
+- Les statistiques du dernier match apparaissent seulement après un match joué depuis la mise en service du robot.
 - Les statistiques secondaires (Ligue des champions, coups francs, palmarès) sont fixes dans `index.html` et ne sont pas mises à jour par le robot.
