@@ -1,0 +1,52 @@
+name: Mise à jour des buts
+
+on:
+  schedule:
+    # Every hour at :17 (UTC). About 3 to 5 API calls per run, under the free plan's 100 calls a day.
+    - cron: "17 * * * *"
+  workflow_dispatch:
+    inputs:
+      messi:
+        description: "Corriger le total de Messi (laisser vide pour une vérification normale)"
+        required: false
+      ronaldo:
+        description: "Corriger le total de Ronaldo"
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-goals
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Vérifier les derniers matchs
+        env:
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+          MESSI: ${{ inputs.messi }}
+          RONALDO: ${{ inputs.ronaldo }}
+        run: |
+          if [ -n "$MESSI" ] && [ -n "$RONALDO" ]; then
+            node scripts/update.mjs "$MESSI" "$RONALDO"
+          else
+            node scripts/update.mjs
+          fi
+
+      - name: Enregistrer les nouveaux chiffres
+        run: |
+          if git diff --quiet data.json; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git commit -m "Mise à jour des buts"
+          git push

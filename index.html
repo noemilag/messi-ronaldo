@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Messi vs Ronaldo</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+/* Layout: a floodlit night match. Split scoreboard (Inter Miami pink on black left, Al-Nassr yellow on navy right), then a zoomed pitch for the race to 1,000, then the head-to-head ledger. Single dark look by choice. */
+:root {
+  --night: #0a1210;
+  --turf: #10201a;
+  --turf-2: #142a21;
+  --chalk: rgba(232, 244, 236, .09);
+  --fg: #eef5f0;
+  --muted: #98aaa0;
+  --line: rgba(232, 244, 236, .12);
+  --messi: #f7b5cd;
+  --messi-deep: #c9658c;
+  --cr7: #fcd116;
+  --cr7-deep: #b8920a;
+  --gold: #e8f1ec;
+  --live: #3ddc84;
+  --f-display: "Big Shoulders Display", "Impact", "Arial Narrow", sans-serif;
+  --f-body: "Barlow", system-ui, sans-serif;
+  --f-data: "Barlow Condensed", "Arial Narrow", sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { background: var(--night); }
+body {
+  background:
+    radial-gradient(120% 60% at 50% -10%, rgba(255,255,255,.08), transparent 60%),
+    repeating-linear-gradient(90deg, var(--turf) 0 80px, var(--turf-2) 80px 160px);
+  background-color: var(--turf);
+  color: var(--fg); font-family: var(--f-body); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 56px;
+  min-height: 100%;
+}
+.wrap { max-width: 1000px; margin: 0 auto; display: grid; gap: 32px; }
+button { font: inherit; cursor: pointer; color: inherit; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+/* Top bar */
+.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.brand { font-family: var(--f-display); font-weight: 800; font-size: 20px; letter-spacing: .06em; text-transform: uppercase; }
+.brand span { color: var(--gold); }
+.status { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-family: var(--f-data); font-size: 14px; color: var(--muted); letter-spacing: .03em; }
+.pill { display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--line); background: rgba(0,0,0,.25); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; font-size: 12px; color: var(--fg); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+.pill.on .dot { background: var(--live); box-shadow: 0 0 10px var(--live); animation: pulse 1.8s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .35; } }
+
+/* Scoreboard */
+.board { position: relative; display: grid; grid-template-columns: 1fr 1fr; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+.half { position: relative; padding: 28px clamp(16px, 4vw, 40px) 26px; display: grid; gap: 4px; min-width: 0; isolation: isolate; overflow: hidden; }
+.half.m { background: linear-gradient(115deg, transparent 62%, rgba(247,181,205,.16) 62% 70%, transparent 70%), linear-gradient(160deg, #1d1418, #0d0a0c 70%); }
+.half.r { background: linear-gradient(245deg, transparent 62%, rgba(252,209,22,.14) 62% 70%, transparent 70%), linear-gradient(200deg, #12234a, #0a1430 70%); text-align: right; }
+.half.m .jersey { -webkit-text-stroke-color: rgba(247,181,205,.14); }
+.half.r .jersey { -webkit-text-stroke-color: rgba(252,209,22,.12); }
+.jersey { position: absolute; z-index: -1; bottom: -.18em; font-family: var(--f-display); font-weight: 900; font-size: clamp(180px, 32vw, 320px); line-height: 1; color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,.08); }
+.half.m .jersey { left: -.04em; } .half.r .jersey { right: -.02em; }
+.who { font-family: var(--f-display); font-weight: 800; font-size: clamp(22px, 4.4vw, 38px); text-transform: uppercase; letter-spacing: .02em; line-height: 1; }
+.who small { display: block; font-family: var(--f-data); font-weight: 600; font-size: 13px; letter-spacing: .12em; color: var(--muted); margin-bottom: 6px; }
+.half.m .who { color: var(--messi); } .half.r .who { color: var(--cr7); }
+.score { font-family: var(--f-display); font-weight: 900; font-size: clamp(76px, 17vw, 168px); line-height: .85; font-variant-numeric: tabular-nums; letter-spacing: -.01em; margin-top: 10px; text-shadow: 0 0 40px rgba(255,255,255,.12); }
+.sub { font-family: var(--f-data); font-size: 14px; color: var(--muted); letter-spacing: .04em; }
+.mid { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 86px; height: 86px; border-radius: 50%; background: var(--night); border: 2px solid var(--line); display: grid; place-content: center; text-align: center; z-index: 2; }
+.mid span { font-family: var(--f-data); font-size: 11px; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+.mid b { font-family: var(--f-display); font-weight: 900; font-size: 30px; line-height: 1; color: var(--gold); }
+.board-cap { text-align: center; font-family: var(--f-data); font-weight: 600; letter-spacing: .16em; font-size: 12px; color: var(--muted); text-transform: uppercase; margin-top: -20px; }
+.score.bump { animation: bump 1.2s ease; }
+@keyframes bump { 0% { transform: scale(1); } 20% { transform: scale(1.12); color: var(--gold); } 100% { transform: scale(1); } }
+
+/* Goal toast */
+.toast { position: fixed; left: 50%; top: calc(16px + env(safe-area-inset-top, 0px)); transform: translateX(-50%); background: var(--gold); color: var(--night); font-family: var(--f-display); font-weight: 900; font-size: 22px; letter-spacing: .04em; padding: 8px 20px; border-radius: 10px; z-index: 20; box-shadow: 0 10px 40px rgba(0,0,0,.5); }
+
+/* Section heads */
+h2 { margin: 0; font-family: var(--f-display); font-weight: 800; font-size: 28px; text-transform: uppercase; letter-spacing: .02em; text-wrap: balance; }
+.kicker { font-family: var(--f-data); font-weight: 600; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+.head { display: grid; gap: 2px; }
+
+/* Race pitch */
+.race { display: grid; gap: 16px; }
+.pitch { position: relative; height: 150px; border: 2px solid var(--chalk); border-radius: 6px; background: rgba(0,0,0,.18); overflow: visible; }
+.pitch::before { content: ""; position: absolute; right: -2px; top: 30%; bottom: 30%; width: 34px; border: 2px solid var(--chalk); border-right: 0; }
+.goal { position: absolute; right: -14px; top: 38%; bottom: 38%; width: 12px; border: 2px solid var(--fg); border-left: 0; background: repeating-linear-gradient(0deg, transparent 0 4px, rgba(255,255,255,.2) 4px 5px); }
+.tick { position: absolute; top: 0; bottom: 0; border-left: 1px dashed var(--chalk); }
+.tick span { position: absolute; bottom: -24px; transform: translateX(-50%); font-family: var(--f-data); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.runner { position: absolute; transform: translate(-50%, -50%); display: grid; justify-items: center; gap: 4px; transition: left 2.6s cubic-bezier(.25,.7,.2,1); }
+.runner .ball { width: 26px; height: 26px; border-radius: 50%; border: 3px solid var(--night); box-shadow: 0 0 0 2px currentColor, 0 0 18px currentColor; background: currentColor; }
+.runner .tag { font-family: var(--f-data); font-weight: 700; font-size: 13px; letter-spacing: .06em; white-space: nowrap; background: var(--night); padding: 1px 7px; border-radius: 4px; }
+.runner.m { top: 30%; color: var(--messi); } .runner.r { top: 72%; color: var(--cr7); }
+.runner.m .tag { order: -1; }
+.race-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 18px; }
+.stat { border-top: 2px solid var(--line); padding-top: 8px; }
+.stat strong { display: block; font-family: var(--f-display); font-weight: 800; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat.m strong { color: var(--messi); } .stat.r strong { color: var(--cr7); }
+.stat span { font-size: 14px; color: var(--muted); }
+
+/* Tabs */
+.tabs { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 4px; border-radius: 12px; background: rgba(0,0,0,.3); border: 1px solid var(--line); justify-self: start; max-width: 100%; }
+.tab { border: 0; background: none; padding: 8px 14px; border-radius: 8px; font-family: var(--f-data); font-weight: 700; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.tab:hover { color: var(--fg); }
+.tab[aria-selected="true"] { background: var(--fg); color: var(--night); }
+
+/* Ledger */
+.panel { display: grid; gap: 16px; }
+.ledger { display: grid; }
+.row { display: grid; grid-template-columns: 72px 1fr minmax(120px, 200px) 1fr 72px; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.row .v { font-family: var(--f-display); font-weight: 800; font-size: 30px; line-height: 1; font-variant-numeric: tabular-nums; color: var(--muted); }
+.row .v.r { text-align: right; }
+.row .v.win.l { color: var(--messi); } .row .v.win.r { color: var(--cr7); }
+.row .lbl { text-align: center; font-family: var(--f-data); font-weight: 600; font-size: 15px; letter-spacing: .04em; line-height: 1.2; }
+.row .lbl small { display: block; font-family: var(--f-body); font-weight: 400; font-size: 12px; color: var(--muted); letter-spacing: 0; margin-top: 2px; }
+.bar { height: 8px; background: rgba(255,255,255,.06); border-radius: 4px; position: relative; overflow: hidden; }
+.bar i { position: absolute; top: 0; bottom: 0; border-radius: 4px; transition: width 1.8s cubic-bezier(.25,.7,.2,1); transition-delay: calc(var(--d, 0s) + .2s); }
+.bar.l i { right: 0; background: linear-gradient(270deg, var(--messi), var(--messi-deep)); }
+.bar.r i { left: 0; background: linear-gradient(90deg, var(--cr7), var(--cr7-deep)); }
+.note { font-size: 13px; color: var(--muted); margin: 0; max-width: 68ch; }
+
+/* Trophy cabinet */
+.cabinet { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.trophy { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; background: rgba(0,0,0,.22); display: grid; gap: 10px; }
+.trophy h3 { margin: 0; font-family: var(--f-data); font-weight: 700; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; }
+.trophy h3 small { display: block; font-family: var(--f-body); font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--muted); font-size: 12px; }
+.pips { display: grid; grid-template-columns: 22px 1fr 34px; align-items: center; gap: 8px; font-family: var(--f-data); font-weight: 700; font-size: 13px; }
+.pips .row-dots { display: flex; flex-wrap: wrap; gap: 4px; }
+.pips .row-dots i { width: 11px; height: 11px; border-radius: 50%; }
+.pips.m .row-dots i { background: var(--messi); } .pips.r .row-dots i { background: var(--cr7); }
+.pips .none { color: var(--muted); font-weight: 500; }
+.pips b { font-family: var(--f-display); font-size: 22px; text-align: right; font-variant-numeric: tabular-nums; }
+.pips.m b, .pips.m span:first-child { color: var(--messi); } .pips.r b, .pips.r span:first-child { color: var(--cr7); }
+
+/* Clubs */
+.clubs { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.club-col { display: grid; gap: 12px; align-content: start; min-width: 0; }
+.club-col h3 { margin: 0; font-family: var(--f-display); font-weight: 800; font-size: 22px; text-transform: uppercase; }
+.club-col.l h3 { color: var(--messi); } .club-col.r h3 { color: var(--cr7); }
+.crow { display: grid; grid-template-columns: 1fr auto; gap: 5px 8px; }
+.crow span:first-child { font-family: var(--f-data); font-weight: 600; font-size: 16px; letter-spacing: .03em; }
+.crow span:nth-child(2) { font-family: var(--f-display); font-weight: 800; font-size: 22px; line-height: 1; font-variant-numeric: tabular-nums; }
+.crow .cb { grid-column: 1 / -1; height: 6px; background: rgba(255,255,255,.06); border-radius: 3px; overflow: hidden; }
+.crow .cb i { display: block; height: 100%; border-radius: 3px; transition: width 1.8s cubic-bezier(.25,.7,.2,1); transition-delay: calc(var(--d, 0s) + .2s); }
+.club-col.l .cb i { background: var(--messi); } .club-col.r .cb i { background: var(--cr7); }
+
+/* Feed */
+.feed { display: grid; position: relative; padding-left: 4px; }
+.ev { display: grid; grid-template-columns: 70px 16px 1fr; gap: 12px; padding: 12px 0; align-items: start; }
+.ev time { font-family: var(--f-data); font-weight: 700; font-size: 14px; letter-spacing: .04em; color: var(--muted); text-transform: uppercase; padding-top: 1px; }
+.ev .mk { width: 12px; height: 12px; border-radius: 50%; margin-top: 5px; box-shadow: 0 0 0 4px rgba(0,0,0,.35); }
+.ev.m .mk { background: var(--messi); } .ev.c .mk { background: var(--cr7); } .ev.n .mk { background: var(--gold); }
+.ev p { margin: 0; min-width: 0; }
+.ev + .ev { border-top: 1px solid var(--line); }
+
+.src { font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 6px; }
+.src a { color: inherit; }
+
+@media (max-width: 640px) {
+  .board { grid-template-columns: 1fr; }
+  .half.r { text-align: left; }
+  .half.r .jersey { right: -.02em; }
+  .mid { top: 50%; left: auto; right: 16px; width: 70px; height: 70px; }
+  .mid b { font-size: 24px; }
+  .board-cap { text-align: left; }
+  .row { grid-template-columns: 52px 1fr 96px 1fr 52px; gap: 6px; }
+  .row .v { font-size: 22px; }
+  .row .lbl { font-size: 13px; }
+  .clubs { grid-template-columns: 1fr; }
+  .ev { grid-template-columns: 58px 14px 1fr; gap: 8px; }
+}
+.replay { border: 1px solid var(--line); background: rgba(0,0,0,.25); border-radius: 999px; padding: 4px 12px; font-family: var(--f-data); font-weight: 700; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+.replay:hover { border-color: var(--fg); }
+/* Motion */
+.half.m { animation: fromL 1.4s cubic-bezier(.25,.7,.2,1) both; }
+.half.r { animation: fromR 1.4s .25s cubic-bezier(.25,.7,.2,1) both; }
+.mid { animation: whistle .9s 2.6s cubic-bezier(.3,1.6,.5,1) both; }
+@keyframes fromL { from { transform: translateX(-6%); opacity: .3; } }
+@keyframes fromR { from { transform: translateX(6%); opacity: .3; } }
+@keyframes whistle { from { transform: translate(-50%, -50%) scale(.4); } }
+.jersey { will-change: transform; }
+.reveal.in { animation: rise 1s cubic-bezier(.25,.7,.2,1) both; animation-delay: var(--d, 0s); }
+@keyframes rise { from { transform: translateY(26px); opacity: .15; } }
+.pips.in .row-dots i { animation: pop .45s cubic-bezier(.3,1.6,.5,1) both; animation-delay: calc(var(--i) * 160ms + var(--d, 0s) + .5s); }
+@keyframes pop { from { transform: scale(0); } }
+.runner.rolling .ball { animation: roll 2.6s cubic-bezier(.25,.7,.2,1); }
+@keyframes roll { from { transform: rotate(-720deg); } }
+.runner .ball { background-image: radial-gradient(circle at 30% 30%, rgba(255,255,255,.55) 0 18%, transparent 20%); }
+.goal.net { animation: net .6s ease 2; }
+@keyframes net { 50% { transform: scaleX(1.5); } }
+.toast { animation: drop .5s cubic-bezier(.3,1.4,.5,1) both; }
+@keyframes drop { from { transform: translate(-50%, -140%); } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="brand">Le <span>Duel</span></span>
+    <div class="status">
+      <span class="pill" id="pill"><span class="dot"></span><span id="pillText">Instantané</span></span>
+      <span id="updated">Données au 23 oct. 2026</span>
+      <button class="replay" id="replay" type="button">↻ Rejouer</button>
+    </div>
+  </header>
+
+  <section class="board" aria-label="Buts en carrière">
+    <div class="half m">
+      <span class="jersey" aria-hidden="true">10</span>
+      <span class="who"><small>Inter Miami · Argentine</small>Lionel Messi</span>
+      <span class="score" id="gM">936</span>
+      <span class="sub">buts en carrière</span>
+    </div>
+    <div class="half r">
+      <span class="jersey" aria-hidden="true">7</span>
+      <span class="who"><small>Al-Nassr · Portugal</small>Cristiano Ronaldo</span>
+      <span class="score" id="gR">982</span>
+      <span class="sub">buts en carrière</span>
+    </div>
+    <div class="mid"><span>Écart</span><b id="gap">46</b></div>
+  </section>
+  <div class="board-cap">Matchs officiels · club et sélection</div>
+
+  <section class="race reveal" data-anim aria-labelledby="raceH">
+    <div class="head"><span class="kicker">Objectif</span><h2 id="raceH">Course aux 1 000 buts</h2></div>
+    <div class="pitch" id="pitch">
+      <span class="goal" aria-hidden="true"></span>
+      <div class="runner m" id="rM"><span class="ball"></span><span class="tag" id="tM">Messi · 936</span></div>
+      <div class="runner r" id="rR"><span class="ball"></span><span class="tag" id="tR">Ronaldo · 982</span></div>
+    </div>
+    <div class="race-meta">
+      <div class="stat m"><strong id="leftM">64</strong><span>buts encore pour Messi</span></div>
+      <div class="stat r"><strong id="leftR">18</strong><span>buts encore pour Ronaldo</span></div>
+      <div class="stat"><strong>900 → 1 000</strong><span>échelle du terrain, zoomée sur le dernier cent</span></div>
+    </div>
+  </section>
+
+  <nav class="tabs" role="tablist" aria-label="Catégories">
+    <button class="tab" role="tab" id="t-carriere" aria-selected="true" data-k="carriere">Carrière</button>
+    <button class="tab" role="tab" id="t-palmares" aria-selected="false" data-k="palmares">Palmarès</button>
+    <button class="tab" role="tab" id="t-clubs" aria-selected="false" data-k="clubs">Par club</button>
+    <button class="tab" role="tab" id="t-direct" aria-selected="false" data-k="direct">Fil d'actu</button>
+  </nav>
+
+  <section class="panel" id="panel" role="tabpanel"></section>
+
+  <footer class="src">
+    <span id="srcNote">Les totaux varient d'un ou deux buts selon les sources (matchs amicaux, comptage des sélections). Statistiques secondaires : dernier relevé public connu.</span>
+    <span>Sources : <a href="https://messixronaldo.com/" target="_blank" rel="noopener">messixronaldo.com</a> · <a href="https://www.beinsports.com/en-us/soccer/articles/cristiano-ronaldo-vs-messi-who-is-closer-to-1-000-goals-and-how-many-do-they-need-2026-08-30" target="_blank" rel="noopener">beIN Sports</a> · <a href="https://www.espn.com/soccer/story/_/id/47220729/messi-score-900th-goal-2026-reach-1000-pass-ronaldo" target="_blank" rel="noopener">ESPN</a></span>
+  </footer>
+</div>
+
+<script>
+// Built-in snapshot. When the shared store holds a newer "stats/current" document, it replaces these values live.
+const SNAPSHOT = {
+  updated: "2026-10-23",
+  goals: { m: 936, r: 982 },
+  carriere: [
+    ["Buts en carrière", 936, 982, "Club + sélection, matchs officiels"],
+    ["Buts en Ligue des champions", 129, 140, ""],
+    ["Buts en Coupe du monde", 13, 8, ""],
+    ["Sélections", 208, 225, "Messi a fait ses adieux à l'Argentine le 6 oct. 2026"],
+    ["Coups francs directs", 70, 64, "Toutes compétitions"],
+  ],
+  palmares: [
+    ["Ballon d'Or", 8, 5, ""],
+    ["Ligue des champions", 4, 5, ""],
+    ["Coupe du monde", 1, 0, ""],
+    ["Titre continental", 2, 1, "Copa América 2021, 2024 · Euro 2016"],
+    ["Ligue des nations", 0, 2, "2019, 2025"],
+    ["Soulier d'Or européen", 6, 4, ""],
+  ],
+  clubs: {
+    m: [["FC Barcelone", 672], ["Inter Miami + Argentine", null], ["Paris SG", 32]],
+    r: [["Real Madrid", 450], ["Al-Nassr + Portugal", null], ["Manchester United", 145], ["Juventus", 101], ["Sporting CP", 5]],
+  },
+  feed: [
+    ["23 oct.", "n", "Compteurs à jour : Messi 936, Ronaldo 982."],
+    ["17 oct.", "m", "Doublé de Messi contre Atlanta United. Il passe à 936 buts."],
+    ["17 oct.", "c", "Ronaldo atteint 981 buts, à 19 unités des 1 000."],
+    ["11 oct.", "m", "Messi à 934 buts en carrière."],
+    ["6 oct.", "m", "Dernier match de Messi avec l'Argentine (208e sélection), conclu par un penalty transformé."],
+  ],
+};
+let DATA = SNAPSHOT;
+let current = "carriere";
+
+const $ = (s) => document.querySelector(s);
+const fmt = (n) => Number(n).toLocaleString("fr-FR");
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function renderTicks() {
+  const p = $("#pitch");
+  [900, 925, 950, 975, 1000].forEach((v) => {
+    const t = document.createElement("span");
+    t.className = "tick"; t.style.left = ((v - 900) / 100) * 100 + "%";
+    t.innerHTML = `<span>${fmt(v)}</span>`;
+    p.appendChild(t);
+  });
+}
+
+// ---- Motion helpers. Every value is written at its final state first; animations replay it when it scrolls into view.
+const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const ease = (t) => 1 - Math.pow(1 - t, 3);
+const delayOf = (el) => (parseFloat(getComputedStyle(el).getPropertyValue("--d")) || 0) * 1000;
+function countTo(el, to, from = 0, dur = 2200, delay = 0) {
+  el.dataset.to = to;
+  if (calm) { el.textContent = fmt(to); return; }
+  const t0 = performance.now() + delay, run = (el._run = {});
+  el.textContent = fmt(from);
+  const step = (now) => {
+    if (el._run !== run) return;
+    const p = Math.max(0, Math.min((now - t0) / dur, 1));
+    el.textContent = fmt(Math.round(from + (to - from) * ease(p)));
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+function setNum(el, to, from) {
+  if (from === undefined) { el.textContent = fmt(to); el.dataset.to = to; }
+  else countTo(el, to, from, 1800);
+}
+function grow(el) {
+  const w = el.style.width;
+  el.style.transition = "none"; el.style.width = "0%";
+  void el.offsetWidth;
+  el.style.transition = ""; el.style.width = w;
+}
+const pos = (g) => Math.max(0, Math.min(100, (g - 900))) + "%";
+function kickOff(runner, g, delay = 0) {
+  runner.style.transition = "none"; runner.style.left = "0%";
+  void runner.offsetWidth;
+  setTimeout(() => {
+    runner.style.transition = ""; runner.classList.add("rolling"); runner.style.left = pos(g);
+    setTimeout(() => runner.classList.remove("rolling"), 2700);
+  }, delay);
+}
+function play(el) {
+  if (calm) return;
+  if (el.dataset.to !== undefined && el.dataset.count !== undefined) countTo(el, Number(el.dataset.to), 0, 2200, delayOf(el) + 300);
+  if (el.matches(".bar i, .cb i")) grow(el);
+  if (el.matches(".reveal, .pips")) el.classList.add("in");
+  if (el.id === "pitch") { kickOff($("#rM"), DATA.goals.m, 600); kickOff($("#rR"), DATA.goals.r, 2000); }
+}
+const io = "IntersectionObserver" in window && !calm
+  ? new IntersectionObserver((entries) => entries.forEach((e) => {
+      if (e.isIntersecting) { play(e.target); io.unobserve(e.target); }
+    }), { rootMargin: "0px 0px 6% 0px" })
+  : null;
+function observe(root) {
+  if (!io) return;
+  root.querySelectorAll("[data-anim], [data-count], .bar i, .cb i, .pips").forEach((el) => io.observe(el));
+}
+let ticking = false;
+addEventListener("scroll", () => {
+  if (calm || ticking) return;
+  ticking = true;
+  requestAnimationFrame(() => {
+    const y = Math.min(scrollY, 600);
+    document.querySelectorAll(".jersey").forEach((j) => { j.style.transform = `translateY(${y * -0.18}px)`; });
+    ticking = false;
+  });
+}, { passive: true });
+
+function renderHeadline(prev) {
+  const { m, r } = DATA.goals;
+  setNum($("#gM"), m, prev?.m);
+  setNum($("#gR"), r, prev?.r);
+  setNum($("#gap"), Math.abs(r - m), prev ? Math.abs(prev.r - prev.m) : undefined);
+  $("#rM").style.left = pos(m); $("#tM").textContent = "Messi · " + fmt(m);
+  $("#rR").style.left = pos(r); $("#tR").textContent = "Ronaldo · " + fmt(r);
+  setNum($("#leftM"), Math.max(1000 - m, 0), prev ? Math.max(1000 - prev.m, 0) : undefined);
+  setNum($("#leftR"), Math.max(1000 - r, 0), prev ? Math.max(1000 - prev.r, 0) : undefined);
+  const d = new Date(DATA.updated + "T12:00:00");
+  if (!isNaN(d)) $("#updated").textContent = "Données au " + d.toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" });
+  if (prev) {
+    const scorers = [];
+    if (m > prev.m) { scorers.push("Messi"); bump("#gM"); }
+    if (r > prev.r) { scorers.push("Ronaldo"); bump("#gR"); }
+    if (scorers.length) {
+      toast("BUT ! " + scorers.join(" et "));
+      const g = $(".goal"); g.classList.remove("net"); void g.offsetWidth; g.classList.add("net");
+    }
+  }
+}
+function bump(sel) { const el = $(sel); el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); }
+function toast(text) {
+  const t = document.createElement("div"); t.className = "toast"; t.textContent = text;
+  document.body.appendChild(t); setTimeout(() => t.remove(), 3500);
+}
+
+function ledger(rows) {
+  return '<div class="ledger">' + rows.map(([lbl, a, b, note], i) => {
+    const max = Math.max(a, b, 1), d = `--d:${i * 0.45}s`;
+    return `<div class="row reveal" data-anim style="${d}">
+      <span class="v l${a > b ? " win" : ""}" data-count data-to="${a}">${fmt(a)}</span>
+      <span class="bar l"><i style="width:${(a / max) * 100}%;${d}"></i></span>
+      <span class="lbl">${esc(lbl)}${note ? `<small>${esc(note)}</small>` : ""}</span>
+      <span class="bar r"><i style="width:${(b / max) * 100}%;${d}"></i></span>
+      <span class="v r${b > a ? " win" : ""}" data-count data-to="${b}">${fmt(b)}</span>
+    </div>`;
+  }).join("") + "</div>";
+}
+
+function pips(side, initials, n) {
+  const dots = n ? Array.from({ length: n }, (_, i) => `<i style="--i:${i}"></i>`).join("") : '<span class="none">Aucun</span>';
+  return `<div class="pips ${side}"><span>${initials}</span><span class="row-dots">${dots}</span><b data-count data-to="${n}">${n}</b></div>`;
+}
+
+function clubCol(side, name, list, rest) {
+  const filled = list.map(([c, g]) => [c, g ?? rest]);
+  const max = Math.max(...filled.map(([, g]) => g));
+  return `<div class="club-col ${side}"><h3>${name}</h3>` + filled.map(([c, g], i) =>
+    `<div class="crow reveal" data-anim style="--d:${i * 0.4}s"><span>${esc(c)}</span><span data-count data-to="${g}">${fmt(g)}</span><span class="cb"><i style="width:${(g / max) * 100}%;--d:${i * 0.4}s"></i></span></div>`
+  ).join("") + "</div>";
+}
+
+const panels = {
+  carriere: () => `<div class="head"><span class="kicker">Face à face</span><h2>Chiffres de carrière</h2></div>${ledger(DATA.carriere)}
+    <p class="note">Le chiffre coloré indique le joueur en tête sur la ligne.</p>`,
+  palmares: () => `<div class="head"><span class="kicker">Vitrine</span><h2>Trophées</h2></div>
+    <div class="cabinet">${DATA.palmares.map(([lbl, a, b, note], i) =>
+      `<div class="trophy reveal" data-anim style="--d:${i * 0.4}s"><h3>${esc(lbl)}${note ? `<small>${esc(note)}</small>` : ""}</h3>${pips("m", "LM", a)}${pips("r", "CR", b)}</div>`).join("")}</div>`,
+  clubs: () => {
+    const sum = (l) => l.reduce((s, [, g]) => s + (g || 0), 0);
+    const restM = DATA.goals.m - sum(DATA.clubs.m), restR = DATA.goals.r - sum(DATA.clubs.r);
+    return `<div class="head"><span class="kicker">Répartition</span><h2>Buts par club</h2></div>
+      <div class="clubs">${clubCol("l", "Messi", DATA.clubs.m, restM)}${clubCol("r", "Ronaldo", DATA.clubs.r, restR)}</div>
+      <p class="note">Les bilans en Europe sont définitifs. La ligne du club actuel regroupe ses buts en club et en sélection : c'est le reste du total en carrière.</p>`;
+  },
+  direct: () => `<div class="head"><span class="kicker">Derniers événements</span><h2>Fil d'actu</h2></div><div class="feed">` + DATA.feed.map(([t, k, txt], i) =>
+    `<div class="ev reveal ${esc(k)}" data-anim style="--d:${i * 0.4}s"><time>${esc(t)}</time><span class="mk"></span><p>${esc(txt)}</p></div>`).join("") + "</div>",
+};
+
+function show(k) {
+  current = k;
+  document.querySelectorAll(".tab").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.k === k)));
+  $("#panel").innerHTML = panels[k]();
+  observe($("#panel"));
+  try { localStorage.setItem("mr-tab", k); } catch (e) {}
+}
+document.querySelectorAll(".tab").forEach((b) => b.addEventListener("click", () => show(b.dataset.k)));
+
+(async () => {
+await refresh(true);
+renderTicks();
+renderHeadline();
+// Timeline: halves slide in, Messi counts, then Ronaldo, then the gap; on the pitch each counter follows its ball.
+[["#gM", 0.9], ["#gR", 1.5], ["#gap", 3.3], ["#leftM", 0.8], ["#leftR", 2.2]].forEach(([s, d]) => {
+  $(s).dataset.count = ""; $(s).style.setProperty("--d", d + "s");
+});
+observe(document);
+if (io) io.observe($("#pitch"));
+try { const s = localStorage.getItem("mr-tab"); if (panels[s]) current = s; } catch (e) {}
+
+function replay() {
+  scrollTo({ top: 0, behavior: calm ? "auto" : "smooth" });
+  document.querySelectorAll(".half, .mid").forEach((el) => { el.style.animation = "none"; void el.offsetWidth; el.style.animation = ""; });
+  document.querySelectorAll(".in").forEach((el) => el.classList.remove("in"));
+  observe(document);
+  if (io) io.observe($("#pitch"));
+  show(current);
+}
+$("#replay").addEventListener("click", replay);
+show(current);
+setInterval(refresh, 60000);
+})();
+
+// Live updates: data.json is rewritten by the GitHub Action (.github/workflows/update.yml) after each match.
+// The page reads it on load, then checks again every minute.
+async function refresh(first) {
+  let d;
+  try {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), 2500);
+    const res = await fetch("data.json?t=" + Date.now(), { cache: "no-store", signal: ctl.signal });
+    clearTimeout(timer);
+    if (!res.ok) return;
+    d = await res.json();
+  } catch (e) { return; }
+  if (!d || !d.goals || typeof d.goals.m !== "number" || typeof d.goals.r !== "number") return;
+  const prev = { ...DATA.goals };
+  const same = prev.m === d.goals.m && prev.r === d.goals.r;
+  DATA = { ...SNAPSHOT, ...d };
+  $("#pill").classList.add("on");
+  $("#pillText").textContent = "Synchronisé";
+  if (first || same) return;
+  renderHeadline(prev);
+  show(current);
+}
+</script>
+
+</body>
+</html>
