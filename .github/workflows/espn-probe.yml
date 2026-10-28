@@ -1,0 +1,22 @@
+name: Test ESPN (temporaire)
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: node scripts/espn-probe.mjs
+      - name: Publier les exemples sur la branche espn-samples
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan espn-samples
+          git rm -rq --cached .
+          git add samples
+          git commit -qm "Exemples ESPN"
+          git push -f origin espn-samples
