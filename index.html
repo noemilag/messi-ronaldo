@@ -185,6 +185,7 @@ h2 { margin: 0; font-family: var(--f-display); font-weight: 800; font-size: 28px
 .mstats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px 8px; border-top: 1px solid var(--line); padding-top: 14px; }
 .mstats div { display: grid; gap: 2px; min-width: 0; }
 .mstats strong { font-family: var(--f-display); font-weight: 800; font-size: 28px; line-height: 1; font-variant-numeric: tabular-nums; }
+.mstats strong:not([data-count]) { font-size: 20px; padding-top: 6px; }
 .mstats .hl strong { color: var(--c); }
 .mstats span { font-size: 12px; color: var(--muted); line-height: 1.2; }
 .mnext { border-radius: 10px; background: rgba(255,255,255,.05); padding: 12px 14px; display: grid; gap: 4px; }
@@ -538,8 +539,8 @@ function matchCard(side, name) {
       <div class="mscore"><span>${esc(last.team)}</span><b>${esc(own)} – ${esc(other)}</b><span>${esc(last.opponent)}</span><span class="chip ${esc(last.result)}">${RESULT[last.result] || ""}</span></div>
       <span class="msub">${esc(last.league)} · ${last.home ? "à domicile" : "à l'extérieur"}</span></div>
       <div class="mstats">
-        ${cell(s.goals, "Buts", true)}${cell(s.assists, "Passes déc.", true)}${cell(s.minutes, "Minutes")}${cell(s.rating != null ? s.rating.toFixed(1).replace(".", ",") : null, "Note")}
-        ${cell(s.shotsOn, `Tirs cadrés sur ${s.shots ?? "–"}`)}${cell(s.keyPasses, "Passes clés")}${cell(s.accuracy != null ? s.accuracy + " %" : null, "Passes réussies")}${cell(s.dribbles, "Dribbles réussis")}
+        ${cell(s.goals, "Buts", true)}${cell(s.assists, "Passes déc.", true)}${cell(s.shots, "Tirs")}${cell(s.shotsOn, "Tirs cadrés")}
+        ${cell(s.starter ? "Titulaire" : s.subbedIn ? "Entré" : null, s.subbedOut ? "Remplacé en cours" : "Statut")}${cell(s.foulsSuffered, "Fautes subies")}${cell(s.offsides, "Hors-jeu")}${cell(s.red ? "Rouge" : s.yellow ? "Jaune" : "Aucun", "Carton")}
       </div>`;
   } else {
     html += `<p class="mempty">Ses statistiques apparaîtront ici après son prochain match. Le robot les ajoute automatiquement.</p>`;

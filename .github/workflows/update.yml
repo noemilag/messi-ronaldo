@@ -2,7 +2,7 @@ name: Mise à jour des buts
 
 on:
   schedule:
-    # Every hour at :17 (UTC). About 3 to 5 API calls per run, under the free plan's 100 calls a day.
+    # Every hour at :17 (UTC). Reads ESPN's public football data: no account or key needed.
     - cron: "17 * * * *"
   workflow_dispatch:
     inputs:
@@ -32,7 +32,6 @@ jobs:
 
       - name: Vérifier les derniers matchs
         env:
-          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           MESSI: ${{ inputs.messi }}
           RONALDO: ${{ inputs.ronaldo }}
         run: |
