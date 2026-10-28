@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1118 1118" role="img" aria-label="10 vs 7 — icône Le Duel">
+<title>10 vs 7 — icône Le Duel</title>
+<defs><clipPath id="terrain"><rect width="1118" height="1118" rx="180"/></clipPath></defs>
+<g clip-path="url(#terrain)"><rect width="1118" height="1118" fill="#10201a"/>
+<rect x="186.333" width="186.334" height="1118" fill="#142a21"/>
+<rect x="559" width="186.334" height="1118" fill="#142a21"/>
+<rect x="931.667" width="186.334" height="1118" fill="#142a21"/>
+</g>
+<path fill="#f7b5cd" fill-rule="evenodd" d="M357,237 L272,237 L136,333 L111,424 L186,393 L187,398 L75,800 L206,800 Z M615,235 L431,235 L366,283 L225,829 L228,835 L268,874 L459,874 L519,830 L583,557 L653,287 Z M516,334 L517,338 L482,470 L409,769 L363,770 L362,765 L468,336 L470,334 Z"/>
+<path fill="#fcd116" fill-rule="evenodd" d="M1032,349 L735,349 L704,463 L874,463 L875,465 L624,904 L766,903 L1005,462 Z"/>
+<path fill="#eef5f0" fill-rule="evenodd" d="M782,507 L727,507 L711,518 L697,578 L705,587 L738,588 L739,591 L734,612 L732,614 L721,613 L724,600 L690,600 L683,631 L694,642 L747,642 L764,630 L779,570 L770,560 L737,560 L736,556 L743,535 L753,536 L751,549 L785,549 L792,518 Z M709,507 L673,508 L645,580 L643,579 L653,507 L615,507 L604,642 L653,641 Z"/>
+</svg>
