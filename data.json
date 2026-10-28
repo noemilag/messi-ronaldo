@@ -42,11 +42,17 @@
       "home": true,
       "league": "Major League Soccer"
     },
-    "r": null
+    "r": {
+      "date": "2026-10-29T18:00:00+00:00",
+      "team": "Al-Nassr",
+      "opponent": "Al Kholood",
+      "home": true,
+      "league": "Pro League"
+    }
   },
   "check": {
-    "date": "2026-10-27",
-    "fixtures": 493,
+    "date": "2026-10-28",
+    "fixtures": 825,
     "calendar": false
   },
   "schedule": {
