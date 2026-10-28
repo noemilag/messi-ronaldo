@@ -82,10 +82,10 @@
   },
   "next": {
     "m": {
-      "date": "2026-10-28T23:30:00.000Z",
+      "date": "2026-11-02T00:00:00.000Z",
       "team": "Inter Miami",
-      "opponent": "FC Cincinnati",
-      "home": true,
+      "opponent": "New England Revolution",
+      "home": false,
       "league": "MLS"
     },
     "r": {
