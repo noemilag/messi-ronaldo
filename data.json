@@ -34,25 +34,25 @@
   ],
   "lastMatch": {
     "m": {
-      "date": "2026-10-24T21:30:00.000Z",
+      "date": "2026-10-28T23:30:00.000Z",
       "team": "Inter Miami",
-      "opponent": "Red Bull New York",
-      "home": false,
+      "opponent": "FC Cincinnati",
+      "home": true,
       "league": "MLS",
-      "score": "0-2",
-      "result": "D",
+      "score": "2-2",
+      "result": "N",
       "stats": {
-        "starter": false,
-        "subbedIn": true,
+        "starter": true,
+        "subbedIn": false,
         "subbedOut": false,
         "goals": 0,
         "assists": 0,
-        "shots": 1,
+        "shots": 5,
         "shotsOn": 0,
-        "foulsSuffered": 1,
+        "foulsSuffered": 0,
         "foulsCommitted": 0,
-        "offsides": 1,
-        "yellow": 0,
+        "offsides": 0,
+        "yellow": 1,
         "red": 0
       }
     },
@@ -179,7 +179,8 @@
     "723712",
     "723711",
     "699020",
-    "698998"
+    "698998",
+    "761908"
   ],
   "check": {
     "date": "2026-10-29",
