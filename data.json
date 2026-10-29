@@ -1,11 +1,16 @@
 {
-  "updated": "2026-10-23",
+  "updated": "2026-10-29",
   "since": "2026-10-24",
   "goals": {
     "m": 936,
-    "r": 982
+    "r": 985
   },
   "feed": [
+    [
+      "29 oct.",
+      "c",
+      "Ronaldo marque 3 buts contre Al Kholood (Saudi Pro League). Il passe à 985 buts."
+    ],
     [
       "23 oct.",
       "n",
@@ -57,22 +62,22 @@
       }
     },
     "r": {
-      "date": "2026-10-23T13:30:00.000Z",
+      "date": "2026-10-29T18:00:00.000Z",
       "team": "Al-Nassr",
-      "opponent": "Al Faisaly",
-      "home": false,
+      "opponent": "Al Kholood",
+      "home": true,
       "league": "Saudi Pro League",
-      "score": "3-1",
+      "score": "5-3",
       "result": "V",
       "stats": {
         "starter": true,
         "subbedIn": false,
         "subbedOut": false,
-        "goals": 0,
+        "goals": 3,
         "assists": 0,
-        "shots": 3,
-        "shotsOn": 1,
-        "foulsSuffered": 1,
+        "shots": 6,
+        "shotsOn": 4,
+        "foulsSuffered": 0,
         "foulsCommitted": 0,
         "offsides": 2,
         "yellow": 0,
@@ -180,7 +185,8 @@
     "723711",
     "699020",
     "698998",
-    "761908"
+    "761908",
+    "401900881"
   ],
   "check": {
     "date": "2026-10-29",
