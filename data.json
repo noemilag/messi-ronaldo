@@ -89,11 +89,11 @@
       "league": "MLS"
     },
     "r": {
-      "date": "2026-10-29T18:00:00.000Z",
+      "date": "2026-11-02T13:45:00.000Z",
       "team": "Al-Nassr",
-      "opponent": "Al Kholood",
-      "home": true,
-      "league": "Saudi Pro League"
+      "opponent": "Pakhtakor",
+      "home": false,
+      "league": "AFC Champions League Elite"
     }
   },
   "espnCounted": [
