@@ -87,10 +87,10 @@
   },
   "next": {
     "m": {
-      "date": "2026-11-02T00:00:00.000Z",
+      "date": "2026-11-07T21:00:00.000Z",
       "team": "Inter Miami",
-      "opponent": "New England Revolution",
-      "home": false,
+      "opponent": "Charlotte FC",
+      "home": true,
       "league": "MLS"
     },
     "r": {
@@ -189,7 +189,7 @@
     "401900881"
   ],
   "check": {
-    "date": "2026-11-01",
+    "date": "2026-11-02",
     "source": "ESPN",
     "calendar": true
   }
