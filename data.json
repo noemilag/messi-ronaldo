@@ -1,11 +1,16 @@
 {
-  "updated": "2026-10-29",
+  "updated": "2026-11-02",
   "since": "2026-10-24",
   "goals": {
-    "m": 936,
+    "m": 937,
     "r": 985
   },
   "feed": [
+    [
+      "2 nov.",
+      "m",
+      "Messi marque contre New England Revolution (MLS). Il passe à 937 buts."
+    ],
     [
       "29 oct.",
       "c",
@@ -39,25 +44,25 @@
   ],
   "lastMatch": {
     "m": {
-      "date": "2026-10-28T23:30:00.000Z",
+      "date": "2026-11-02T00:00:00.000Z",
       "team": "Inter Miami",
-      "opponent": "FC Cincinnati",
-      "home": true,
+      "opponent": "New England Revolution",
+      "home": false,
       "league": "MLS",
-      "score": "2-2",
-      "result": "N",
+      "score": "2-1",
+      "result": "V",
       "stats": {
         "starter": true,
         "subbedIn": false,
         "subbedOut": false,
-        "goals": 0,
-        "assists": 0,
-        "shots": 5,
-        "shotsOn": 0,
+        "goals": 1,
+        "assists": 1,
+        "shots": 4,
+        "shotsOn": 2,
         "foulsSuffered": 0,
         "foulsCommitted": 0,
         "offsides": 0,
-        "yellow": 1,
+        "yellow": 0,
         "red": 0
       }
     },
@@ -186,7 +191,8 @@
     "699020",
     "698998",
     "761908",
-    "401900881"
+    "401900881",
+    "761932"
   ],
   "check": {
     "date": "2026-11-02",
