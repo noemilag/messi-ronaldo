@@ -44,23 +44,23 @@
   ],
   "lastMatch": {
     "m": {
-      "date": "2026-11-02T00:00:00.000Z",
+      "date": "2026-11-07T21:00:00.000Z",
       "team": "Inter Miami",
-      "opponent": "New England Revolution",
-      "home": false,
+      "opponent": "Charlotte FC",
+      "home": true,
       "league": "MLS",
-      "score": "2-1",
-      "result": "V",
+      "score": "3-3",
+      "result": "N",
       "stats": {
         "starter": true,
         "subbedIn": false,
         "subbedOut": false,
-        "goals": 1,
-        "assists": 1,
+        "goals": 0,
+        "assists": 0,
         "shots": 4,
         "shotsOn": 2,
-        "foulsSuffered": 0,
-        "foulsCommitted": 0,
+        "foulsSuffered": 1,
+        "foulsCommitted": 1,
         "offsides": 0,
         "yellow": 0,
         "red": 0
@@ -193,7 +193,8 @@
     "761908",
     "401900881",
     "761932",
-    "401912631"
+    "401912631",
+    "761938"
   ],
   "check": {
     "date": "2026-11-07",
