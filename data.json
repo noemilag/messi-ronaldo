@@ -99,10 +99,10 @@
       "league": "MLS"
     },
     "r": {
-      "date": "2026-11-14T19:45:00.000Z",
+      "date": "2026-11-17T19:45:00.000Z",
       "team": "Portugal",
-      "opponent": "Denmark",
-      "home": true,
+      "opponent": "Wales",
+      "home": false,
       "league": "UEFA Nations League"
     }
   },
