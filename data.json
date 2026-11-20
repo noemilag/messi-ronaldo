@@ -1,11 +1,16 @@
 {
-  "updated": "2026-11-02",
+  "updated": "2026-11-20",
   "since": "2026-10-24",
   "goals": {
     "m": 937,
-    "r": 985
+    "r": 986
   },
   "feed": [
+    [
+      "20 nov.",
+      "c",
+      "Ronaldo marque contre Al Ahli (Saudi Pro League). Il passe à 986 buts."
+    ],
     [
       "2 nov.",
       "m",
@@ -67,24 +72,24 @@
       }
     },
     "r": {
-      "date": "2026-10-29T18:00:00.000Z",
+      "date": "2026-11-20T17:30:00.000Z",
       "team": "Al-Nassr",
-      "opponent": "Al Kholood",
-      "home": true,
+      "opponent": "Al Ahli",
+      "home": false,
       "league": "Saudi Pro League",
-      "score": "5-3",
-      "result": "V",
+      "score": "1-3",
+      "result": "D",
       "stats": {
         "starter": true,
         "subbedIn": false,
         "subbedOut": false,
-        "goals": 3,
+        "goals": 1,
         "assists": 0,
         "shots": 6,
-        "shotsOn": 4,
+        "shotsOn": 2,
         "foulsSuffered": 0,
         "foulsCommitted": 0,
-        "offsides": 2,
+        "offsides": 0,
         "yellow": 0,
         "red": 0
       }
@@ -195,7 +200,8 @@
     "761932",
     "401912631",
     "761938",
-    "401861167"
+    "401861167",
+    "401900905"
   ],
   "check": {
     "date": "2026-11-20",
