@@ -97,10 +97,10 @@
   },
   "next": {
     "m": {
-      "date": "2026-11-21T23:00:00.000Z",
+      "date": "2026-11-28T01:00:00.000Z",
       "team": "Inter Miami",
       "opponent": "Columbus Crew",
-      "home": true,
+      "home": false,
       "league": "MLS"
     },
     "r": {
