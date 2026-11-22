@@ -49,25 +49,25 @@
   ],
   "lastMatch": {
     "m": {
-      "date": "2026-11-07T21:00:00.000Z",
+      "date": "2026-11-21T23:00:00.000Z",
       "team": "Inter Miami",
-      "opponent": "Charlotte FC",
+      "opponent": "Columbus Crew",
       "home": true,
       "league": "MLS",
-      "score": "3-3",
-      "result": "N",
+      "score": "0-3",
+      "result": "D",
       "stats": {
         "starter": true,
         "subbedIn": false,
         "subbedOut": false,
         "goals": 0,
         "assists": 0,
-        "shots": 4,
+        "shots": 2,
         "shotsOn": 2,
         "foulsSuffered": 1,
         "foulsCommitted": 1,
         "offsides": 0,
-        "yellow": 0,
+        "yellow": 1,
         "red": 0
       }
     },
@@ -202,10 +202,11 @@
     "761938",
     "401861167",
     "401900905",
-    "401861189"
+    "401861189",
+    "401933739"
   ],
   "check": {
-    "date": "2026-11-21",
+    "date": "2026-11-22",
     "source": "ESPN",
     "calendar": true
   }
