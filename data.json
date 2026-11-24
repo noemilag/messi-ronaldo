@@ -104,11 +104,11 @@
       "league": "MLS"
     },
     "r": {
-      "date": "2026-11-24T18:15:00.000Z",
+      "date": "2026-11-28T12:15:00.000Z",
       "team": "Al-Nassr",
-      "opponent": "Al Sadd",
-      "home": true,
-      "league": "AFC Champions League Elite"
+      "opponent": "Al Hazem",
+      "home": false,
+      "league": "Saudi Pro League"
     }
   },
   "espnCounted": [
