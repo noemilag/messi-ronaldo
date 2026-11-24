@@ -1,11 +1,16 @@
 {
-  "updated": "2026-11-20",
+  "updated": "2026-11-24",
   "since": "2026-10-24",
   "goals": {
     "m": 937,
-    "r": 986
+    "r": 987
   },
   "feed": [
+    [
+      "24 nov.",
+      "c",
+      "Ronaldo marque contre Al Sadd (AFC Champions League Elite). Il passe à 987 buts."
+    ],
     [
       "20 nov.",
       "c",
@@ -72,24 +77,24 @@
       }
     },
     "r": {
-      "date": "2026-11-20T17:30:00.000Z",
+      "date": "2026-11-24T18:15:00.000Z",
       "team": "Al-Nassr",
-      "opponent": "Al Ahli",
-      "home": false,
-      "league": "Saudi Pro League",
-      "score": "1-3",
-      "result": "D",
+      "opponent": "Al Sadd",
+      "home": true,
+      "league": "AFC Champions League Elite",
+      "score": "2-1",
+      "result": "V",
       "stats": {
         "starter": true,
         "subbedIn": false,
         "subbedOut": false,
         "goals": 1,
         "assists": 0,
-        "shots": 6,
-        "shotsOn": 2,
-        "foulsSuffered": 0,
+        "shots": 5,
+        "shotsOn": 1,
+        "foulsSuffered": 2,
         "foulsCommitted": 0,
-        "offsides": 0,
+        "offsides": 4,
         "yellow": 0,
         "red": 0
       }
@@ -203,7 +208,8 @@
     "401861167",
     "401900905",
     "401861189",
-    "401933739"
+    "401933739",
+    "401912584"
   ],
   "check": {
     "date": "2026-11-24",
