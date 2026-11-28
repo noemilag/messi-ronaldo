@@ -77,24 +77,24 @@
       }
     },
     "r": {
-      "date": "2026-11-24T18:15:00.000Z",
+      "date": "2026-11-28T12:15:00.000Z",
       "team": "Al-Nassr",
-      "opponent": "Al Sadd",
-      "home": true,
-      "league": "AFC Champions League Elite",
-      "score": "2-1",
+      "opponent": "Al Hazem",
+      "home": false,
+      "league": "Saudi Pro League",
+      "score": "1-0",
       "result": "V",
       "stats": {
         "starter": true,
         "subbedIn": false,
         "subbedOut": false,
-        "goals": 1,
+        "goals": 0,
         "assists": 0,
-        "shots": 5,
-        "shotsOn": 1,
-        "foulsSuffered": 2,
-        "foulsCommitted": 0,
-        "offsides": 4,
+        "shots": 3,
+        "shotsOn": 0,
+        "foulsSuffered": 0,
+        "foulsCommitted": 2,
+        "offsides": 2,
         "yellow": 0,
         "red": 0
       }
@@ -109,10 +109,10 @@
       "league": "Club Friendly"
     },
     "r": {
-      "date": "2026-11-28T12:15:00.000Z",
+      "date": "2026-12-04T17:30:00.000Z",
       "team": "Al-Nassr",
-      "opponent": "Al Hazem",
-      "home": false,
+      "opponent": "Al Qadsiah",
+      "home": true,
       "league": "Saudi Pro League"
     }
   },
@@ -210,7 +210,8 @@
     "401861189",
     "401933739",
     "401912584",
-    "401933727"
+    "401933727",
+    "401900442"
   ],
   "check": {
     "date": "2026-11-28",
